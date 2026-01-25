@@ -152,13 +152,13 @@ export const achievements: Achievement[] = [
     },
   },
   {
-    id: 'sandbox-explorer',
-    name: 'Sandbox Explorer',
-    description: 'Use Sandbox mode to experiment freely',
+    id: 'playground-explorer',
+    name: 'Playground Explorer',
+    description: 'Use Playground mode to experiment freely',
     icon: 'box',
     requirement: {
       type: 'custom',
-      value: 'use_sandbox',
+      value: 'use_playground',
     },
   },
 ]

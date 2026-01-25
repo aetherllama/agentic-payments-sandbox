@@ -20,7 +20,7 @@ const agentTypes: { type: AgentType; label: string; description: string }[] = [
   { type: 'negotiation', label: 'Negotiation Agent', description: 'Negotiates with other agents' },
 ]
 
-export function Sandbox() {
+export function Playground() {
   const navigate = useNavigate()
   const {
     wallet,
@@ -50,11 +50,11 @@ export function Sandbox() {
 
   useEffect(() => {
     unlockAchievement({
-      id: 'sandbox-explorer',
-      name: 'Sandbox Explorer',
-      description: 'Use Sandbox mode to experiment freely',
+      id: 'playground-explorer',
+      name: 'Playground Explorer',
+      description: 'Use Playground mode to experiment freely',
       icon: 'box',
-      requirement: { type: 'custom', value: 'use_sandbox' },
+      requirement: { type: 'custom', value: 'use_playground' },
     })
   }, [unlockAchievement])
 
@@ -80,8 +80,8 @@ export function Sandbox() {
             amount,
             type: 'debit',
             status: 'completed',
-            agentId: agentState.activeAgentId || 'sandbox',
-            description: `Sandbox transaction #${Date.now()}`,
+            agentId: agentState.activeAgentId || 'playground',
+            description: `Playground transaction #${Date.now()}`,
           })
         }
       }
@@ -192,9 +192,9 @@ export function Sandbox() {
               </svg>
             </button>
             <div>
-              <h1 className="text-2xl font-bold text-slate-900">Sandbox Mode</h1>
+              <h1 className="text-2xl font-bold text-slate-900">Playground</h1>
               <p className="text-sm text-slate-500">
-                Free-form experimentation with agentic payments
+                Explore agentic payments freely
               </p>
             </div>
           </div>

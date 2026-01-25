@@ -20,24 +20,24 @@ const shoppingProducts: Product[] = [
 ]
 
 const bills: Bill[] = [
-  { id: 'bill-1', name: 'Electricity', amount: 120, dueDate: Date.now() + 3 * 24 * 60 * 60 * 1000, category: 'Utilities', priority: 'essential', isPaid: false, isRecurring: true, recurringInterval: 'monthly' },
-  { id: 'bill-2', name: 'Internet', amount: 65, dueDate: Date.now() + 5 * 24 * 60 * 60 * 1000, category: 'Utilities', priority: 'essential', isPaid: false, isRecurring: true, recurringInterval: 'monthly' },
-  { id: 'bill-3', name: 'Phone', amount: 45, dueDate: Date.now() + 7 * 24 * 60 * 60 * 1000, category: 'Utilities', priority: 'important', isPaid: false, isRecurring: true, recurringInterval: 'monthly' },
-  { id: 'bill-4', name: 'Gym Membership', amount: 30, dueDate: Date.now() + 10 * 24 * 60 * 60 * 1000, category: 'Fitness', priority: 'optional', isPaid: false, isRecurring: true, recurringInterval: 'monthly' },
-  { id: 'bill-5', name: 'Insurance', amount: 150, dueDate: Date.now() + 2 * 24 * 60 * 60 * 1000, category: 'Insurance', priority: 'essential', isPaid: false, isRecurring: true, recurringInterval: 'monthly' },
+  { id: 'bill-1', name: 'Electricity', amount: 120, dueDate: Date.now() + 45 * 1000, category: 'Utilities', priority: 'essential', isPaid: false, isRecurring: true, recurringInterval: 'monthly' },
+  { id: 'bill-2', name: 'Internet', amount: 65, dueDate: Date.now() + 90 * 1000, category: 'Utilities', priority: 'essential', isPaid: false, isRecurring: true, recurringInterval: 'monthly' },
+  { id: 'bill-3', name: 'Phone', amount: 45, dueDate: Date.now() + 135 * 1000, category: 'Utilities', priority: 'important', isPaid: false, isRecurring: true, recurringInterval: 'monthly' },
+  { id: 'bill-4', name: 'Gym Membership', amount: 30, dueDate: Date.now() + 180 * 1000, category: 'Fitness', priority: 'optional', isPaid: false, isRecurring: true, recurringInterval: 'monthly' },
+  { id: 'bill-5', name: 'Insurance', amount: 150, dueDate: Date.now() + 30 * 1000, category: 'Insurance', priority: 'essential', isPaid: false, isRecurring: true, recurringInterval: 'monthly' },
 ]
 
 const subscriptions: Subscription[] = [
-  { id: 'sub-1', name: 'Premium Streaming', monthlyAmount: 15.99, category: 'Entertainment', value: 8, usageScore: 0.85, isActive: true, renewalDate: Date.now() + 15 * 24 * 60 * 60 * 1000 },
-  { id: 'sub-2', name: 'Music Service', monthlyAmount: 9.99, category: 'Entertainment', value: 7, usageScore: 0.2, isActive: true, renewalDate: Date.now() + 8 * 24 * 60 * 60 * 1000, alternatives: [
+  { id: 'sub-1', name: 'Premium Streaming', monthlyAmount: 15.99, category: 'Entertainment', value: 8, usageScore: 0.85, isActive: true, renewalDate: Date.now() + 120 * 1000 },
+  { id: 'sub-2', name: 'Music Service', monthlyAmount: 9.99, category: 'Entertainment', value: 7, usageScore: 0.2, isActive: true, renewalDate: Date.now() + 45 * 1000, alternatives: [
     { id: 'alt-1', name: 'Free Tier with Ads', monthlyAmount: 0, features: ['Ad-supported', 'Shuffle only'], savings: 9.99 },
     { id: 'alt-2', name: 'Family Plan Split', monthlyAmount: 3, features: ['Full features', 'Share with 5'], savings: 6.99 },
   ]},
-  { id: 'sub-3', name: 'Cloud Storage', monthlyAmount: 2.99, category: 'Productivity', value: 9, usageScore: 0.95, isActive: true, renewalDate: Date.now() + 20 * 24 * 60 * 60 * 1000 },
-  { id: 'sub-4', name: 'News Premium', monthlyAmount: 12.99, category: 'News', value: 4, usageScore: 0.15, isActive: true, renewalDate: Date.now() + 5 * 24 * 60 * 60 * 1000, alternatives: [
+  { id: 'sub-3', name: 'Cloud Storage', monthlyAmount: 2.99, category: 'Productivity', value: 9, usageScore: 0.95, isActive: true, renewalDate: Date.now() + 180 * 1000 },
+  { id: 'sub-4', name: 'News Premium', monthlyAmount: 12.99, category: 'News', value: 4, usageScore: 0.15, isActive: true, renewalDate: Date.now() + 75 * 1000, alternatives: [
     { id: 'alt-3', name: 'Free Articles', monthlyAmount: 0, features: ['5 articles/month', 'No premium'], savings: 12.99 },
   ]},
-  { id: 'sub-5', name: 'Fitness App', monthlyAmount: 7.99, category: 'Fitness', value: 6, usageScore: 0.4, isActive: true, renewalDate: Date.now() + 12 * 24 * 60 * 60 * 1000 },
+  { id: 'sub-5', name: 'Fitness App', monthlyAmount: 7.99, category: 'Fitness', value: 6, usageScore: 0.4, isActive: true, renewalDate: Date.now() + 150 * 1000 },
 ]
 
 export const scenarios: Scenario[] = [
@@ -47,7 +47,7 @@ export const scenarios: Scenario[] = [
     description: 'Learn how AI agents make purchase decisions with spending limits and auto-approval thresholds.',
     type: 'shopping',
     difficulty: 'beginner',
-    estimatedDuration: '5-10 min',
+    estimatedDuration: '2-4 min',
     initialBalance: 500,
     objectives: [
       { id: 'obj-1', description: 'Configure agent spending limits', isCompleted: false, isOptional: false, conceptId: 'spending-limits' },
@@ -70,7 +70,7 @@ export const scenarios: Scenario[] = [
     description: 'Optimize recurring payments by analyzing usage patterns and finding cost-saving opportunities.',
     type: 'subscription',
     difficulty: 'intermediate',
-    estimatedDuration: '10-15 min',
+    estimatedDuration: '2-4 min',
     initialBalance: 200,
     objectives: [
       { id: 'obj-1', description: 'Review all active subscriptions', isCompleted: false, isOptional: false, conceptId: 'recurring-payments' },
@@ -92,7 +92,7 @@ export const scenarios: Scenario[] = [
     description: 'Set up intelligent bill payment with priority scheduling and constraint management.',
     type: 'billpay',
     difficulty: 'intermediate',
-    estimatedDuration: '10-15 min',
+    estimatedDuration: '2-4 min',
     initialBalance: 400,
     objectives: [
       { id: 'obj-1', description: 'Review upcoming bills', isCompleted: false, isOptional: false, conceptId: 'bill-prioritization' },
@@ -114,7 +114,7 @@ export const scenarios: Scenario[] = [
     description: 'Explore risk controls and human oversight for automated investment decisions.',
     type: 'investment',
     difficulty: 'advanced',
-    estimatedDuration: '15-20 min',
+    estimatedDuration: '2-4 min',
     initialBalance: 10000,
     objectives: [
       { id: 'obj-1', description: 'Set risk tolerance level', isCompleted: false, isOptional: false, conceptId: 'investment-risk-controls' },
@@ -135,7 +135,7 @@ export const scenarios: Scenario[] = [
     description: 'Watch AI agents negotiate with each other and learn about agent-to-agent trust.',
     type: 'negotiation',
     difficulty: 'advanced',
-    estimatedDuration: '15-20 min',
+    estimatedDuration: '2-4 min',
     initialBalance: 1000,
     objectives: [
       { id: 'obj-1', description: 'Observe agent negotiation', isCompleted: false, isOptional: false, conceptId: 'negotiation-protocols' },

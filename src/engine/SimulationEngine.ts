@@ -22,7 +22,7 @@ export class SimulationEngine {
     this.config = config
     this.eventQueue = new EventQueue()
     this.timeController = new TimeController({
-      speed: 1,
+      speed: 2,
       onTick: this.handleTick.bind(this),
       tickInterval: 100,
     })
@@ -50,7 +50,7 @@ export class SimulationEngine {
     if (scenario.type === 'shopping' && scenario.products) {
       scenario.products.forEach((product, index) => {
         this.eventQueue.addEvent({
-          scheduledTime: baseTime + (index + 1) * 5000,
+          scheduledTime: baseTime + (index + 1) * 8000,
           type: 'agent_action',
           priority: 5,
           payload: {

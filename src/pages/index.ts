@@ -1,4 +1,4 @@
 export { Landing } from './Landing'
 export { Simulation } from './Simulation'
-export { Sandbox } from './Sandbox'
+export { Playground } from './Playground'
 export { Results } from './Results'

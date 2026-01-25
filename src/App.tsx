@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { Landing, Simulation, Sandbox, Results } from './pages'
+import { Landing, Simulation, Playground, Results } from './pages'
 
 function App() {
   return (
@@ -7,7 +7,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/simulation/:scenarioId" element={<Simulation />} />
-        <Route path="/sandbox" element={<Sandbox />} />
+        <Route path="/playground" element={<Playground />} />
         <Route path="/results/:scenarioId" element={<Results />} />
       </Routes>
     </BrowserRouter>

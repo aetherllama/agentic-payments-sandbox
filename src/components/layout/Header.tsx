@@ -8,8 +8,8 @@ export function Header() {
   const education = useEducation()
 
   const navItems = [
-    { path: '/', label: 'Scenarios' },
-    { path: '/sandbox', label: 'Sandbox' },
+    { path: '/', label: 'Demos' },
+    { path: '/playground', label: 'Playground' },
   ]
 
   return (

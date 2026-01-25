@@ -136,7 +136,7 @@ export function Landing() {
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl font-bold text-slate-900 mb-4"
           >
-            Agentic Payments Sandbox
+            Agentic Payments Demo
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -144,9 +144,9 @@ export function Landing() {
             transition={{ delay: 0.1 }}
             className="text-lg text-slate-600"
           >
-            Learn how AI agents make autonomous financial decisions through interactive
-            simulations. Configure spending limits, set approval thresholds, and observe
-            intelligent payment automation in action.
+            Experience how AI agents make autonomous financial decisions. See spending limits,
+            approval workflows, and intelligent payment automation in action through
+            interactive demonstrations.
           </motion.p>
         </div>
 
@@ -165,14 +165,14 @@ export function Landing() {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => navigate('/sandbox')}
+              onClick={() => navigate('/playground')}
               rightIcon={
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               }
             >
-              Open Sandbox
+              Open Playground
             </Button>
           </div>
 
@@ -201,11 +201,11 @@ export function Landing() {
           className="bg-gradient-to-br from-primary-50 to-primary-100 rounded-2xl p-8 text-center"
         >
           <h3 className="text-xl font-semibold text-slate-900 mb-2">
-            New to Agentic Payments?
+            See Agentic Payments in Action
           </h3>
           <p className="text-slate-600 mb-4 max-w-lg mx-auto">
-            Start with the Shopping Agent scenario to learn the basics of spending limits,
-            auto-approval thresholds, and human-in-the-loop oversight.
+            Start with the Shopping Agent demo to see spending limits, auto-approval thresholds,
+            and human-in-the-loop oversight working together.
           </p>
           <Button
             variant="primary"
@@ -216,7 +216,7 @@ export function Landing() {
               </svg>
             }
           >
-            Start Learning
+            Start Demo
           </Button>
         </motion.div>
       </div>
