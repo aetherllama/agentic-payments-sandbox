@@ -1,43 +1,52 @@
 import type { Scenario, Product, Merchant, Bill, Subscription } from '../../types'
 
 const merchants: Merchant[] = [
-  { id: 'tech-store', name: 'TechMart', category: 'Electronics', trustScore: 4.5, averagePrice: 150, deliveryTime: '2-3 days' },
-  { id: 'grocery-plus', name: 'Grocery Plus', category: 'Groceries', trustScore: 4.8, averagePrice: 45, deliveryTime: '1 day' },
-  { id: 'fashion-hub', name: 'Fashion Hub', category: 'Clothing', trustScore: 4.2, averagePrice: 65, deliveryTime: '3-5 days' },
-  { id: 'home-essentials', name: 'Home Essentials', category: 'Home', trustScore: 4.6, averagePrice: 80, deliveryTime: '2-4 days' },
-  { id: 'book-world', name: 'Book World', category: 'Books', trustScore: 4.9, averagePrice: 20, deliveryTime: '1-2 days' },
+  { id: 'fairprice', name: 'FairPrice', category: 'Groceries', trustScore: 4.8, averagePrice: 45, deliveryTime: '1-2 days' },
+  { id: 'cold-storage', name: 'Cold Storage', category: 'Groceries', trustScore: 4.7, averagePrice: 65, deliveryTime: '1 day' },
+  { id: 'sheng-siong', name: 'Sheng Siong', category: 'Groceries', trustScore: 4.6, averagePrice: 35, deliveryTime: '1-2 days' },
+  { id: 'giant', name: 'Giant', category: 'Groceries', trustScore: 4.5, averagePrice: 40, deliveryTime: '1-2 days' },
+  { id: 'ya-kun', name: 'Ya Kun Kaya Toast', category: 'F&B', trustScore: 4.9, averagePrice: 8, deliveryTime: 'Same day' },
+  { id: 'kopitiam', name: 'Kopitiam', category: 'Hawker', trustScore: 4.4, averagePrice: 6, deliveryTime: 'Same day' },
+  { id: 'maxwell', name: 'Maxwell Food Centre', category: 'Hawker', trustScore: 4.8, averagePrice: 5, deliveryTime: 'Same day' },
+  { id: 'challenger', name: 'Challenger', category: 'Electronics', trustScore: 4.5, averagePrice: 150, deliveryTime: '2-3 days' },
+  { id: 'courts', name: 'Courts', category: 'Electronics', trustScore: 4.3, averagePrice: 200, deliveryTime: '3-5 days' },
+  { id: 'don-don-donki', name: 'Don Don Donki', category: 'Retail', trustScore: 4.6, averagePrice: 25, deliveryTime: '1-2 days' },
 ]
 
 const shoppingProducts: Product[] = [
-  { id: 'prod-1', name: 'Wireless Mouse', category: 'Electronics', merchantId: 'tech-store', price: 29.99, rating: 4.5, inStock: true, priority: 3 },
-  { id: 'prod-2', name: 'USB-C Hub', category: 'Electronics', merchantId: 'tech-store', price: 45.99, rating: 4.3, inStock: true, priority: 2 },
-  { id: 'prod-3', name: 'Mechanical Keyboard', category: 'Electronics', merchantId: 'tech-store', price: 89.99, rating: 4.7, inStock: true, priority: 1 },
-  { id: 'prod-4', name: 'Monitor Stand', category: 'Electronics', merchantId: 'tech-store', price: 34.99, rating: 4.4, inStock: true, priority: 4 },
-  { id: 'prod-5', name: 'Webcam HD', category: 'Electronics', merchantId: 'tech-store', price: 59.99, rating: 4.6, inStock: false, priority: 2 },
-  { id: 'prod-6', name: 'Desk Lamp', category: 'Home', merchantId: 'home-essentials', price: 24.99, rating: 4.2, inStock: true, priority: 5 },
-  { id: 'prod-7', name: 'Notebook Set', category: 'Office', merchantId: 'book-world', price: 12.99, rating: 4.8, inStock: true, priority: 6 },
-  { id: 'prod-8', name: 'Premium Headphones', category: 'Electronics', merchantId: 'tech-store', price: 149.99, originalPrice: 199.99, rating: 4.9, inStock: true, priority: 1 },
+  { id: 'prod-1', name: 'Milo 1.5kg', category: 'Groceries', merchantId: 'fairprice', price: 14.95, rating: 4.8, inStock: true, priority: 1 },
+  { id: 'prod-2', name: 'Jasmine Rice 5kg', category: 'Groceries', merchantId: 'fairprice', price: 12.50, rating: 4.7, inStock: true, priority: 2 },
+  { id: 'prod-3', name: 'Kaya Spread', category: 'Groceries', merchantId: 'fairprice', price: 6.80, rating: 4.9, inStock: true, priority: 3 },
+  { id: 'prod-4', name: 'Mechanical Keyboard', category: 'Electronics', merchantId: 'challenger', price: 129.00, rating: 4.5, inStock: true, priority: 1 },
+  { id: 'prod-5', name: 'USB-C Hub', category: 'Electronics', merchantId: 'challenger', price: 59.90, rating: 4.3, inStock: true, priority: 2 },
+  { id: 'prod-6', name: 'Chicken Rice', category: 'Hawker', merchantId: 'maxwell', price: 4.50, rating: 4.9, inStock: true, priority: 4 },
+  { id: 'prod-7', name: 'Kaya Toast Set', category: 'F&B', merchantId: 'ya-kun', price: 5.80, rating: 4.8, inStock: true, priority: 5 },
+  { id: 'prod-8', name: 'Tiger Beer 6-Pack', category: 'Groceries', merchantId: 'cold-storage', price: 18.90, rating: 4.4, inStock: true, priority: 6 },
+  { id: 'prod-9', name: 'Laksa Instant Noodles', category: 'Groceries', merchantId: 'sheng-siong', price: 3.50, rating: 4.6, inStock: true, priority: 7 },
+  { id: 'prod-10', name: 'Premium Headphones', category: 'Electronics', merchantId: 'courts', price: 199.00, originalPrice: 249.00, rating: 4.7, inStock: true, priority: 1 },
 ]
 
 const bills: Bill[] = [
-  { id: 'bill-1', name: 'Electricity', amount: 120, dueDate: Date.now() + 45 * 1000, category: 'Utilities', priority: 'essential', isPaid: false, isRecurring: true, recurringInterval: 'monthly' },
-  { id: 'bill-2', name: 'Internet', amount: 65, dueDate: Date.now() + 90 * 1000, category: 'Utilities', priority: 'essential', isPaid: false, isRecurring: true, recurringInterval: 'monthly' },
-  { id: 'bill-3', name: 'Phone', amount: 45, dueDate: Date.now() + 135 * 1000, category: 'Utilities', priority: 'important', isPaid: false, isRecurring: true, recurringInterval: 'monthly' },
-  { id: 'bill-4', name: 'Gym Membership', amount: 30, dueDate: Date.now() + 180 * 1000, category: 'Fitness', priority: 'optional', isPaid: false, isRecurring: true, recurringInterval: 'monthly' },
-  { id: 'bill-5', name: 'Insurance', amount: 150, dueDate: Date.now() + 30 * 1000, category: 'Insurance', priority: 'essential', isPaid: false, isRecurring: true, recurringInterval: 'monthly' },
+  { id: 'bill-1', name: 'HDB Service & Conservancy', amount: 85, dueDate: Date.now() + 45 * 1000, category: 'Housing', priority: 'essential', isPaid: false, isRecurring: true, recurringInterval: 'monthly' },
+  { id: 'bill-2', name: 'SP Group Utilities', amount: 150, dueDate: Date.now() + 30 * 1000, category: 'Utilities', priority: 'essential', isPaid: false, isRecurring: true, recurringInterval: 'monthly' },
+  { id: 'bill-3', name: 'SingTel Mobile', amount: 68, dueDate: Date.now() + 90 * 1000, category: 'Telecommunications', priority: 'important', isPaid: false, isRecurring: true, recurringInterval: 'monthly' },
+  { id: 'bill-4', name: 'StarHub Broadband', amount: 45, dueDate: Date.now() + 120 * 1000, category: 'Telecommunications', priority: 'essential', isPaid: false, isRecurring: true, recurringInterval: 'monthly' },
+  { id: 'bill-5', name: 'EZ-Link Auto Top-up', amount: 50, dueDate: Date.now() + 135 * 1000, category: 'Transport', priority: 'important', isPaid: false, isRecurring: true, recurringInterval: 'monthly' },
+  { id: 'bill-6', name: 'CPF Voluntary Contribution', amount: 500, dueDate: Date.now() + 180 * 1000, category: 'Savings', priority: 'optional', isPaid: false, isRecurring: true, recurringInterval: 'monthly' },
 ]
 
 const subscriptions: Subscription[] = [
-  { id: 'sub-1', name: 'Premium Streaming', monthlyAmount: 15.99, category: 'Entertainment', value: 8, usageScore: 0.85, isActive: true, renewalDate: Date.now() + 120 * 1000 },
-  { id: 'sub-2', name: 'Music Service', monthlyAmount: 9.99, category: 'Entertainment', value: 7, usageScore: 0.2, isActive: true, renewalDate: Date.now() + 45 * 1000, alternatives: [
-    { id: 'alt-1', name: 'Free Tier with Ads', monthlyAmount: 0, features: ['Ad-supported', 'Shuffle only'], savings: 9.99 },
-    { id: 'alt-2', name: 'Family Plan Split', monthlyAmount: 3, features: ['Full features', 'Share with 5'], savings: 6.99 },
+  { id: 'sub-1', name: 'Netflix', monthlyAmount: 15.98, category: 'Entertainment', value: 8, usageScore: 0.85, isActive: true, renewalDate: Date.now() + 120 * 1000 },
+  { id: 'sub-2', name: 'Spotify Premium', monthlyAmount: 9.90, category: 'Entertainment', value: 7, usageScore: 0.2, isActive: true, renewalDate: Date.now() + 45 * 1000, alternatives: [
+    { id: 'alt-1', name: 'Free Tier with Ads', monthlyAmount: 0, features: ['Ad-supported', 'Shuffle only'], savings: 9.90 },
+    { id: 'alt-2', name: 'Family Plan Split', monthlyAmount: 3, features: ['Full features', 'Share with 5'], savings: 6.90 },
   ]},
-  { id: 'sub-3', name: 'Cloud Storage', monthlyAmount: 2.99, category: 'Productivity', value: 9, usageScore: 0.95, isActive: true, renewalDate: Date.now() + 180 * 1000 },
-  { id: 'sub-4', name: 'News Premium', monthlyAmount: 12.99, category: 'News', value: 4, usageScore: 0.15, isActive: true, renewalDate: Date.now() + 75 * 1000, alternatives: [
-    { id: 'alt-3', name: 'Free Articles', monthlyAmount: 0, features: ['5 articles/month', 'No premium'], savings: 12.99 },
+  { id: 'sub-3', name: 'iCloud+ 200GB', monthlyAmount: 3.98, category: 'Productivity', value: 9, usageScore: 0.95, isActive: true, renewalDate: Date.now() + 180 * 1000 },
+  { id: 'sub-4', name: 'The Straits Times Premium', monthlyAmount: 29.90, category: 'News', value: 4, usageScore: 0.15, isActive: true, renewalDate: Date.now() + 75 * 1000, alternatives: [
+    { id: 'alt-3', name: 'Free Articles', monthlyAmount: 0, features: ['5 articles/month', 'No premium'], savings: 29.90 },
   ]},
-  { id: 'sub-5', name: 'Fitness App', monthlyAmount: 7.99, category: 'Fitness', value: 6, usageScore: 0.4, isActive: true, renewalDate: Date.now() + 150 * 1000 },
+  { id: 'sub-5', name: 'GrabUnlimited', monthlyAmount: 9.90, category: 'Transport', value: 8, usageScore: 0.7, isActive: true, renewalDate: Date.now() + 60 * 1000 },
+  { id: 'sub-6', name: 'ActiveSG Gym', monthlyAmount: 2.50, category: 'Fitness', value: 6, usageScore: 0.4, isActive: true, renewalDate: Date.now() + 150 * 1000 },
 ]
 
 export const scenarios: Scenario[] = [
@@ -76,7 +85,7 @@ export const scenarios: Scenario[] = [
       { id: 'obj-1', description: 'Review all active subscriptions', isCompleted: false, isOptional: false, conceptId: 'recurring-payments' },
       { id: 'obj-2', description: 'Identify low-usage subscriptions', isCompleted: false, isOptional: false, conceptId: 'subscription-optimization' },
       { id: 'obj-3', description: 'Accept a cost-saving recommendation', isCompleted: false, isOptional: false },
-      { id: 'obj-4', description: 'Save at least $10/month', isCompleted: false, isOptional: false },
+      { id: 'obj-4', description: 'Save at least S$10/month', isCompleted: false, isOptional: false },
       { id: 'obj-5', description: 'Cancel an unused subscription', isCompleted: false, isOptional: true },
     ],
     concepts: ['recurring-payments', 'subscription-optimization', 'decision-transparency'],
@@ -93,7 +102,7 @@ export const scenarios: Scenario[] = [
     type: 'billpay',
     difficulty: 'intermediate',
     estimatedDuration: '2-4 min',
-    initialBalance: 400,
+    initialBalance: 600,
     objectives: [
       { id: 'obj-1', description: 'Review upcoming bills', isCompleted: false, isOptional: false, conceptId: 'bill-prioritization' },
       { id: 'obj-2', description: 'Set payment priorities', isCompleted: false, isOptional: false },
@@ -103,7 +112,7 @@ export const scenarios: Scenario[] = [
     ],
     concepts: ['bill-prioritization', 'reservation-system', 'decision-transparency'],
     initialConfig: {
-      spendingLimits: { perTransaction: 200, daily: 500, autoApproveThreshold: 50 },
+      spendingLimits: { perTransaction: 200, daily: 600, autoApproveThreshold: 50 },
       riskSettings: { maxRiskLevel: 3, requireApprovalAbove: 2 },
     },
     bills,

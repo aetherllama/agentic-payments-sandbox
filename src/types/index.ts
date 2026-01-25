@@ -3,6 +3,9 @@
 // ============================================================================
 
 export type AgentType = 'shopping' | 'subscription' | 'billpay' | 'investment' | 'negotiation'
+
+// Singapore-specific payment methods
+export type SingaporePaymentMethod = 'PayNow' | 'NETS' | 'GrabPay' | 'DBS PayLah!'
 export type AgentStatus = 'idle' | 'thinking' | 'executing' | 'waiting_approval' | 'paused' | 'completed' | 'error'
 export type TransactionStatus = 'pending' | 'approved' | 'rejected' | 'completed' | 'failed' | 'reserved'
 export type SimulationSpeed = 1 | 2 | 5 | 10

@@ -3,7 +3,12 @@ import { motion } from 'framer-motion'
 import { useEducation } from '../../store'
 import { Badge } from '../common'
 
-export function Header() {
+interface HeaderProps {
+  onMenuClick?: () => void
+  showMenuButton?: boolean
+}
+
+export function Header({ onMenuClick, showMenuButton }: HeaderProps) {
   const location = useLocation()
   const education = useEducation()
 
@@ -16,7 +21,28 @@ export function Header() {
     <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-4 sm:gap-8">
+            {showMenuButton && (
+              <button
+                onClick={onMenuClick}
+                className="lg:hidden p-2 -ml-2 rounded-lg text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                aria-label="Open menu"
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
+              </button>
+            )}
             <Link to="/" className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center">
                 <svg
@@ -33,8 +59,11 @@ export function Header() {
                   />
                 </svg>
               </div>
-              <span className="font-semibold text-lg text-slate-900">
-                Agentic Payments
+              <span className="font-semibold text-lg text-slate-900 hidden sm:inline">
+                Agentic Payments SG
+              </span>
+              <span className="font-semibold text-lg text-slate-900 sm:hidden">
+                Payments SG
               </span>
             </Link>
 
@@ -76,7 +105,7 @@ export function Header() {
             </div>
 
             <button
-              className="p-2 rounded-lg text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+              className="p-2 rounded-lg text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
               aria-label="Help"
             >
               <svg
