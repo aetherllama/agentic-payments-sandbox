@@ -1,4 +1,5 @@
 import type { Scenario, Product, Merchant, Bill, Subscription } from '../../types'
+import { DEFAULT_SG_MANDATES } from '../../types/guardrails'
 
 const merchants: Merchant[] = [
   { id: 'fairprice', name: 'FairPrice', category: 'Groceries', trustScore: 4.8, averagePrice: 45, deliveryTime: '1-2 days' },
@@ -37,14 +38,18 @@ const bills: Bill[] = [
 
 const subscriptions: Subscription[] = [
   { id: 'sub-1', name: 'Netflix', monthlyAmount: 15.98, category: 'Entertainment', value: 8, usageScore: 0.85, isActive: true, renewalDate: Date.now() + 120 * 1000 },
-  { id: 'sub-2', name: 'Spotify Premium', monthlyAmount: 9.90, category: 'Entertainment', value: 7, usageScore: 0.2, isActive: true, renewalDate: Date.now() + 45 * 1000, alternatives: [
-    { id: 'alt-1', name: 'Free Tier with Ads', monthlyAmount: 0, features: ['Ad-supported', 'Shuffle only'], savings: 9.90 },
-    { id: 'alt-2', name: 'Family Plan Split', monthlyAmount: 3, features: ['Full features', 'Share with 5'], savings: 6.90 },
-  ]},
+  {
+    id: 'sub-2', name: 'Spotify Premium', monthlyAmount: 9.90, category: 'Entertainment', value: 7, usageScore: 0.2, isActive: true, renewalDate: Date.now() + 45 * 1000, alternatives: [
+      { id: 'alt-1', name: 'Free Tier with Ads', monthlyAmount: 0, features: ['Ad-supported', 'Shuffle only'], savings: 9.90 },
+      { id: 'alt-2', name: 'Family Plan Split', monthlyAmount: 3, features: ['Full features', 'Share with 5'], savings: 6.90 },
+    ]
+  },
   { id: 'sub-3', name: 'iCloud+ 200GB', monthlyAmount: 3.98, category: 'Productivity', value: 9, usageScore: 0.95, isActive: true, renewalDate: Date.now() + 180 * 1000 },
-  { id: 'sub-4', name: 'The Straits Times Premium', monthlyAmount: 29.90, category: 'News', value: 4, usageScore: 0.15, isActive: true, renewalDate: Date.now() + 75 * 1000, alternatives: [
-    { id: 'alt-3', name: 'Free Articles', monthlyAmount: 0, features: ['5 articles/month', 'No premium'], savings: 29.90 },
-  ]},
+  {
+    id: 'sub-4', name: 'The Straits Times Premium', monthlyAmount: 29.90, category: 'News', value: 4, usageScore: 0.15, isActive: true, renewalDate: Date.now() + 75 * 1000, alternatives: [
+      { id: 'alt-3', name: 'Free Articles', monthlyAmount: 0, features: ['5 articles/month', 'No premium'], savings: 29.90 },
+    ]
+  },
   { id: 'sub-5', name: 'GrabUnlimited', monthlyAmount: 9.90, category: 'Transport', value: 8, usageScore: 0.7, isActive: true, renewalDate: Date.now() + 60 * 1000 },
   { id: 'sub-6', name: 'ActiveSG Gym', monthlyAmount: 2.50, category: 'Fitness', value: 6, usageScore: 0.4, isActive: true, renewalDate: Date.now() + 150 * 1000 },
 ]
@@ -69,6 +74,7 @@ export const scenarios: Scenario[] = [
     initialConfig: {
       spendingLimits: { perTransaction: 100, daily: 300, autoApproveThreshold: 25 },
       riskSettings: { maxRiskLevel: 4, requireApprovalAbove: 3 },
+      guardrails: { ...DEFAULT_SG_MANDATES },
     },
     merchants,
     products: shoppingProducts,
@@ -92,6 +98,7 @@ export const scenarios: Scenario[] = [
     initialConfig: {
       spendingLimits: { perTransaction: 50, daily: 100, autoApproveThreshold: 15 },
       riskSettings: { maxRiskLevel: 3, requireApprovalAbove: 2 },
+      guardrails: { ...DEFAULT_SG_MANDATES },
     },
     subscriptions,
   },
@@ -114,6 +121,7 @@ export const scenarios: Scenario[] = [
     initialConfig: {
       spendingLimits: { perTransaction: 200, daily: 600, autoApproveThreshold: 50 },
       riskSettings: { maxRiskLevel: 3, requireApprovalAbove: 2 },
+      guardrails: { ...DEFAULT_SG_MANDATES },
     },
     bills,
   },
@@ -136,6 +144,7 @@ export const scenarios: Scenario[] = [
     initialConfig: {
       spendingLimits: { perTransaction: 1000, daily: 2000, autoApproveThreshold: 100 },
       riskSettings: { maxRiskLevel: 3, requireApprovalAbove: 2 },
+      guardrails: { ...DEFAULT_SG_MANDATES },
     },
   },
   {
@@ -157,6 +166,7 @@ export const scenarios: Scenario[] = [
     initialConfig: {
       spendingLimits: { perTransaction: 200, daily: 500, autoApproveThreshold: 50 },
       riskSettings: { maxRiskLevel: 4, requireApprovalAbove: 3 },
+      guardrails: { ...DEFAULT_SG_MANDATES },
     },
   },
 ]

@@ -2,6 +2,7 @@ import { TimeController } from './TimeController'
 import { EventQueue } from './EventQueue'
 import type { SimulationEvent, SimulationSpeed, Scenario, ApprovalRequest } from '../types'
 import { useStore } from '../store'
+import { GuardrailValidator } from './GuardrailValidator'
 
 export interface SimulationEngineConfig {
   scenario: Scenario
@@ -195,6 +196,50 @@ export class SimulationEngine {
       description: `Checking if $${price} purchase is within limits`,
       data: { price, limits: spendingLimits },
     })
+
+    const isNewMerchant = !wallet.transactions.some(t => t.merchantId === product.merchantId);
+
+    // --- Agentic Governance (Transaction Mandate) Check ---
+    const validation = GuardrailValidator.validateMandate(
+      activeAgent,
+      {
+        amount: price,
+        merchantName: product.merchantId,
+        category: product.category,
+        timestamp: Date.now(),
+        // For simulation purposes, we assume PayNow as the default method if not specified
+        description: `Payment via PayNow to ${product.merchantId}`
+      },
+      wallet.transactions,
+      isNewMerchant
+    )
+
+    if (!validation.allowed) {
+      if (validation.requiresApproval) {
+        this.requestApproval({
+          id: `approval_${Date.now()}`,
+          agentId: activeAgent.id,
+          type: 'transaction',
+          amount: price,
+          description: `Purchase: ${product.name} (Mandate Override Required)`,
+          reasoning: `${validation.reason} Risk: ${validation.mitigationRisk}`,
+          riskLevel: validation.severity === 'high' ? 5 : validation.severity === 'medium' ? 3 : 1,
+          decisionTree: this.buildDecisionTree(product, activeAgent),
+          createdAt: Date.now(),
+          merchantName: product.merchantId,
+          productName: product.name,
+        })
+        return
+      } else {
+        store.addAgentAction({
+          agentId: activeAgent.id,
+          type: 'complete',
+          description: `Rejected by Guardrail: ${validation.reason}`,
+        })
+        return
+      }
+    }
+    // -----------------------------------------
 
     if (price > spendingLimits.perTransaction) {
       store.addAgentAction({

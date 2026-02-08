@@ -1,5 +1,6 @@
 import { StateCreator } from 'zustand'
 import type { AgentState, AgentConfig, AgentStatus, AgentAction, StoreState } from '../../types'
+import { DEFAULT_SG_MANDATES } from '../../types/guardrails'
 
 export interface AgentSlice {
   agent: AgentState
@@ -127,4 +128,5 @@ export const createDefaultAgentConfig = (type: AgentConfig['type'], name: string
   allowedCategories: [],
   blockedMerchants: [],
   customRules: [],
+  guardrails: { ...DEFAULT_SG_MANDATES },
 })

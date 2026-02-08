@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { ShoppingAgent } from '../ShoppingAgent'
 import type { AgentConfig, Product } from '../../types'
+import { DEFAULT_SG_MANDATES } from '../../types/guardrails'
 
 describe('ShoppingAgent', () => {
   let agent: ShoppingAgent
@@ -24,6 +25,7 @@ describe('ShoppingAgent', () => {
       allowedCategories: [],
       blockedMerchants: [],
       customRules: [],
+      guardrails: { ...DEFAULT_SG_MANDATES },
     }
 
     agent = new ShoppingAgent(config)

@@ -1,3 +1,5 @@
+import { GuardrailSettings } from './guardrails'
+
 // ============================================================================
 // Core Types
 // ============================================================================
@@ -24,6 +26,7 @@ export interface Transaction {
   merchantId?: string
   merchantName?: string
   category?: string
+  paymentMethod?: SingaporePaymentMethod
   agentId: string
   description: string
   reasoning?: string
@@ -73,6 +76,7 @@ export interface AgentConfig {
   allowedCategories: string[]
   blockedMerchants: string[]
   customRules: AgentRule[]
+  guardrails: GuardrailSettings
 }
 
 export interface AgentRule {
