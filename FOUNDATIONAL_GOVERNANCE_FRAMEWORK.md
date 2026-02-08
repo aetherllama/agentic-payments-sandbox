@@ -50,7 +50,71 @@ graph TD
 
 ### 2.2 Integration Modalities
 1.  **Synchronous (Block-Before-Commit)**: The Rail Layer rejects any request that does not carry a valid "Governance Signature" from the Validator.
-2.  **Asynchronous (Monitor-and-Kill)**: The Validator monitors the stream and triggers a reversal or pauses the agent if a mandate is breached post-facto (used for high-throughput, low-latency needs).
+2.  **Asynchronous (Monitor-and-Kill)**: The Validator monitors the stream and triggers a reversal or pauses the agent if a mandate is breached post-facto.
+
+### 2.3 The Governance Stack
+The framework defines four distinct layers of operation:
+
+| Layer | Responsibility | Output |
+| :--- | :--- | :--- |
+| **Interface** | Normalization of agent payloads. | `GovernanceEnvelope` |
+| **Logic** | Evaluation of deterministic safety rules. | Pass/Fail/HITL |
+| **State** | Contextual historical lookups. | Risk Context |
+| **Rail** | Cryptographic commit of valid actions. | Transaction Hash |
+
+```mermaid
+graph BT
+    subgraph Layers
+        L1[Rail Layer]
+        L2[State Layer]
+        L3[Logic Layer]
+        L4[Interface Layer]
+    end
+    L4 --> L3
+    L3 --> L2
+    L2 --> L1
+    
+    subgraph Data
+        D1[Signed TX]
+        D2[Risk Metrics]
+        D3[Mandate Results]
+        D4[Unified Envelope]
+    end
+    D4 -.-> L4
+    D3 -.-> L3
+    D2 -.-> L2
+    D1 -.-> L1
+```
+
+### 2.4 Validation Lifecycle
+The sequence of events from intent to execution:
+
+```mermaid
+sequenceDiagram
+    participant A as AI Agent
+    participant I as Interface Layer
+    participant V as Validation Engine
+    participant S as State Store
+    participant H as Human (HITL)
+    participant R as Financial Rail
+
+    A->>I: Propose Action (Intent + reasoning)
+    I->>V: Unified Governance Envelope
+    V->>S: Fetch Context (Merchant/History)
+    S-->>V: Risk Profile
+    V->>V: Run Mandate Suite
+    
+    alt Validation Passed
+        V->>R: Commit Transaction
+        R-->>A: Success Receipt
+    else HITL Threshold Reached
+        V->>H: Approval Request + Trace
+        H-->>V: Approved
+        V->>R: Commit Transaction
+    else Blocked
+        V-->>A: Rejection + Reason
+    end
+```
 
 ---
 
