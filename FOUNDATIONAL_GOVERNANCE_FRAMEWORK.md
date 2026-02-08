@@ -1,10 +1,10 @@
-# Foundational Agentic Governance Framework (FAGF)
+# Foundational Agentic Governance Framework for Financial Services (FAGF-FS)
 **Version: 1.0.0-Stable**
 
 ## 1. Introduction & Purpose
-The **Foundational Agentic Governance Framework (FAGF)** is a standardized specification designed to provide architectural blueprints and operational mandates for the safe deployment of autonomous AI agents in financial services.
+The **Foundational Agentic Governance Framework for Financial Services (FAGF-FS)** is a standardized specification designed to provide architectural blueprints and operational mandates for the safe deployment of autonomous AI agents in financial ecosystems.
 
-As AI agents transition from advisory roles to transactional execution, FAGF provides the necessary **immutability** and **interpretability** to ensure every movement of capital is governed by both human-defined policy and regulatory mandates.
+As AI agents transition from advisory roles to transactional execution, FAGF-FS provides the necessary **immutability** and **interpretability** to ensure every movement of capital is governed by both human-defined policy and regulatory mandates.
 
 ### 1.1 Core Objectives
 - **Risk Mitigation**: Prevent runaway spending, fraudulent redirections, and logic-based exploits.
@@ -15,7 +15,7 @@ As AI agents transition from advisory roles to transactional execution, FAGF pro
 
 ## 2. Theoretical Architecture
 
-FAGF operates on a **Tiered Validation Logic** (TVL) pattern, separating the "Executor" (the AI Agent) from the "Validator" (the Governance Logic).
+FAGF-FS operates on a **Tiered Validation Logic** (TVL) pattern, separating the "Executor" (the AI Agent) from the "Validator" (the Governance Logic).
 
 ### 2.1 The Validator Pattern
 The Validator is a standalone, deterministic service that sits between the Agent and the Transactional Rails.
@@ -155,7 +155,7 @@ The Validator must proactively verify that the entities mentioned by the agent (
 
 ## 5. Data Models (Technical Layer)
 
-FAGF-compliant implementations MUST adhere to the following core data structures.
+FAGF-FS-compliant implementations MUST adhere to the following core data structures.
 
 ### 5.1 The Governance Envelope
 Every transaction proposal must be wrapped in a Governance Envelope:
