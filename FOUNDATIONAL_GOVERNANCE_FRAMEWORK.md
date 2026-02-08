@@ -208,6 +208,19 @@ Projects can extend FAGF by defining custom **Namespace Mandates**. These must f
 - Always use a secondary "Verifier" model for high-value extensions.
 - Ensure all custom mandates provide a `riskDisclosure` for auditability.
 
+## 8. Acknowledgements
+The development of FAGF-FS was made possible through the collaboration of AI safety researchers, financial architects, and regulatory compliance experts dedicated to the secure advancement of autonomous agents.
+
+## 9. References & Foundational Standards
+The following standards and guidelines were instrumental in the creation of this framework:
+
+- **Monetary Authority of Singapore (MAS)**: 
+    - *User Protection Guidelines (E-Payments User Protection Advisory)*.
+    - *Technology Risk Management (TRM) Guidelines*.
+- **Agentic Payment Protocol 2 (AP2)**: The underlying communication and state-machine standard for autonomous financial agents.
+- **ISO 20022**: For financial messaging structure and compatibility.
+- **GDPR & Singapore PDPA**: For data privacy and agentic "reasoning" transparency requirements.
+
 ---
 *End of Specification*
 *Published by: Agentic Financial Standards Org (Conceptual)*
