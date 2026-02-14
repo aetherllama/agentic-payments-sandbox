@@ -34,7 +34,8 @@ Resources:
               - GET
               - HEAD
             AllowedOrigins:
-              - '*'
+              - 'https://example.com'
+              - 'https://*.example.com'
             MaxAge: 3000
 
   # Bucket Policy for public read access
