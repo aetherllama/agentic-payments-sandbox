@@ -15,6 +15,7 @@ export function Header({ onMenuClick, showMenuButton }: HeaderProps) {
   const navItems = [
     { path: '/', label: 'Demos' },
     { path: '/playground', label: 'Playground' },
+    { path: '/test-suite', label: 'Test Suite' },
   ]
 
   return (

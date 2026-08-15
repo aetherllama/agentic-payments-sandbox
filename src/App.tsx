@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { Landing, Simulation, Playground, Results } from './pages'
+import { Landing, Simulation, Playground, Results, TestSuite } from './pages'
 
 function App() {
   return (
@@ -9,6 +9,7 @@ function App() {
         <Route path="/simulation/:scenarioId" element={<Simulation />} />
         <Route path="/playground" element={<Playground />} />
         <Route path="/results/:scenarioId" element={<Results />} />
+        <Route path="/test-suite" element={<TestSuite />} />
       </Routes>
     </BrowserRouter>
   )
