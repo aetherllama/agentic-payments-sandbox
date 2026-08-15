@@ -95,4 +95,41 @@ describe('walletSlice', () => {
     expect(wallet.transactions).toHaveLength(0)
     expect(wallet.dailySpent).toBe(0)
   })
+
+  describe('SAFR Sandbox Tokens', () => {
+    it('should fund the wallet from the sandbox token pool', () => {
+      const store = useStore.getState()
+      const initialPool = useStore.getState().wallet.sandboxTokenPool
+
+      const funded = store.fundWithSandboxTokens(200)
+
+      const { wallet } = useStore.getState()
+      expect(funded).toBe(true)
+      expect(wallet.balance).toBe(1200)
+      expect(wallet.sandboxTokenPool).toBe(initialPool - 200)
+      expect(wallet.transactions[0].description).toContain('SAFR Sandbox Tokens')
+    })
+
+    it('should refuse to fund more than the remaining sandbox token pool', () => {
+      const store = useStore.getState()
+      const initialPool = useStore.getState().wallet.sandboxTokenPool
+
+      const funded = store.fundWithSandboxTokens(initialPool + 1)
+
+      const { wallet } = useStore.getState()
+      expect(funded).toBe(false)
+      expect(wallet.balance).toBe(1000)
+      expect(wallet.sandboxTokenPool).toBe(initialPool)
+    })
+
+    it('should preserve the sandbox token pool across a wallet reset', () => {
+      const store = useStore.getState()
+      store.fundWithSandboxTokens(300)
+      const poolAfterFunding = useStore.getState().wallet.sandboxTokenPool
+
+      store.resetWallet(2000)
+
+      expect(useStore.getState().wallet.sandboxTokenPool).toBe(poolAfterFunding)
+    })
+  })
 })

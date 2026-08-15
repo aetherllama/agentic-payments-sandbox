@@ -23,7 +23,7 @@ export const useStore = create<AppStore>()(
       ...createScenarioSlice(...a),
       ...createEducationSlice(...a),
     }),
-    { name: 'agentic-payments-store' }
+    { name: 'safr-sandbox-store' }
   )
 )
 

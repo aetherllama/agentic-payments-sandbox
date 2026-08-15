@@ -14,7 +14,11 @@ export interface WalletSlice {
   setDailyLimit: (limit: number) => void
   resetDailySpent: () => void
   resetWallet: (initialBalance?: number) => void
+  fundWithSandboxTokens: (amount: number) => boolean
+  resetSandboxTokenPool: () => void
 }
+
+export const SANDBOX_TOKEN_POOL_INITIAL = 5000
 
 const initialWalletState: WalletState = {
   balance: 1000,
@@ -23,6 +27,7 @@ const initialWalletState: WalletState = {
   transactions: [],
   dailySpent: 0,
   dailyLimit: 500,
+  sandboxTokenPool: SANDBOX_TOKEN_POOL_INITIAL,
 }
 
 export const createWalletSlice: StateCreator<StoreState & WalletSlice, [], [], WalletSlice> = (set, get) => ({
@@ -157,8 +162,33 @@ export const createWalletSlice: StateCreator<StoreState & WalletSlice, [], [], W
   },
 
   resetWallet: (initialBalance = 1000) => {
-    set({
-      wallet: { ...initialWalletState, balance: initialBalance },
+    set((state) => ({
+      wallet: { ...initialWalletState, balance: initialBalance, sandboxTokenPool: state.wallet.sandboxTokenPool },
+    }))
+  },
+
+  fundWithSandboxTokens: (amount) => {
+    const state = get()
+    if (amount <= 0 || amount > state.wallet.sandboxTokenPool) return false
+
+    set((s) => ({
+      wallet: { ...s.wallet, sandboxTokenPool: s.wallet.sandboxTokenPool - amount },
+    }))
+
+    state.addTransaction({
+      amount,
+      type: 'credit',
+      status: 'completed',
+      agentId: 'sandbox-faucet',
+      description: `Funded via SAFR Sandbox Tokens (${amount} SBX)`,
     })
+
+    return true
+  },
+
+  resetSandboxTokenPool: () => {
+    set((state) => ({
+      wallet: { ...state.wallet, sandboxTokenPool: SANDBOX_TOKEN_POOL_INITIAL },
+    }))
   },
 })

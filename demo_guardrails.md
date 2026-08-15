@@ -1,6 +1,6 @@
-# Demo Governance: Active Transaction Mandates
+# SAFR Runtime Guardrails: Active Transaction Mandates
 
-This document lists the specific governance mandates and safety guardrails active in the **Agentic Payments Sandbox** demo environment, including their technical implementation and security objectives.
+This document lists the specific **SAFR (Safeguards for Agentic Finance at Runtime)** mandates enforced live in the **SAFR Sandbox** demo environment, including their technical implementation and security objectives. See [SAFR_SPECIFICATION.md](SAFR_SPECIFICATION.md) for the full framework.
 
 ## 1. Governance Architecture
 All mandates are centralizing validated in `GuardrailValidator.ts` via the `validateMandate` method. This method acts as a synchronous gatekeeper before any payment event is committed to the simulation state.
@@ -31,6 +31,16 @@ The system enforces a strict regulatory blocklist based on MAS (Singapore) and A
 ---
 
 ## 3. Demo Context
-These values represent the default "Singapore Safe" profile. Parameters can be tuned per-agent via the **Governance** tab in the Playground UI, which directly modifies the `GuardrailSettings` state.
+These values represent the default "Singapore Safe" profile. Parameters can be tuned per-agent via the **Guardrails** tab in the Playground UI, which directly modifies the `GuardrailSettings` state.
+
+Agents are funded with simulated **SAFR Sandbox Tokens** (see [README.md](README.md#safr-sandbox-tokens)) drawn from a finite, session-scoped pool — no real money is ever involved, and every funded transaction still passes through the same `validateMandate` gate as any other.
+
+## 4. Runtime Testing
+
+SAFR mandates are exercised at two levels:
+- **Unit level** (`src/engine/__tests__/GuardrailValidator.test.ts`): direct calls into `validateMandate` covering each mandate, boundary values, and precedence when multiple mandates fire on the same transaction.
+- **Runtime/integration level** (`src/engine/__tests__/SimulationEngine.test.ts`): a full `SimulationEngine` run against a scenario, asserting that guardrails actually intercept agent-issued transactions as they execute — not just in isolation.
+
+Run both with `npm run test`.
 
 *Ref: [GuardrailValidator.ts](src/engine/GuardrailValidator.ts)*

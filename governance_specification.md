@@ -1,4 +1,5 @@
 # Agentic Governance & Transaction Mandates Specification
+*Reference companion to [SAFR (Safeguards for Agentic Finance at Runtime)](SAFR_SPECIFICATION.md)*
 
 This document describes the architecture of the Agentic Governance system in the context of autonomous payments, specifically addressing **Transaction Mandates** and **Financial Services** regulations.
 
@@ -254,4 +255,4 @@ Interaction between the Agent, the Validator, and the Mandates.
 
 ---
 *Revision: 1.0 (Feb 2026)*
-*Ref: Generic Governance Framework v0.1*
+*Ref: [SAFR_SPECIFICATION.md](SAFR_SPECIFICATION.md)*

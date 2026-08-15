@@ -1,16 +1,21 @@
-# Agentic Payments SG
+# SAFR Sandbox
 
-An interactive demonstration of AI-powered autonomous payment systems, tailored for the Singapore market. Experience how AI agents make financial decisions with spending limits, approval workflows, and human-in-the-loop oversight.
+**SAFR — Safeguards for Agentic Finance at Runtime.**
+
+An interactive demo *and* test harness for the [SAFR specification](SAFR_SPECIFICATION.md): a runtime governance layer that sits between autonomous AI payment agents and the financial rails they transact on. Watch SAFR's mandates — spending limits, merchant verification, rate limiting, cooldowns, category blocklists — intercept live agent decisions in real time, fund agents with simulated SAFR Sandbox Tokens, and run the automated test suite that exercises the same guardrail engine at both the unit and runtime level.
+
+Singapore-flavored scenarios (PayNow, MAS compliance, local merchants) are used throughout as a realistic regulatory backdrop for the guardrails — no real money or real regulator is involved anywhere in this sandbox.
 
 ## Overview
 
-This demo showcases the core concepts of agentic payments:
+This demo showcases the core concepts of SAFR-governed agentic payments:
 
 - **Spending Limits** - Per-transaction and daily limits that constrain agent behavior
 - **Auto-Approval Thresholds** - Configurable thresholds for autonomous transactions
 - **Human-in-the-Loop** - Manual approval workflows for high-value or risky transactions
 - **Risk Assessment** - Real-time risk evaluation for payment decisions
 - **Multi-Agent Systems** - Agents negotiating and transacting with each other
+- **SAFR Sandbox Tokens** - Fund any agent's wallet from a finite, session-scoped simulated token pool
 
 ## Getting Started
 
@@ -23,7 +28,7 @@ This demo showcases the core concepts of agentic payments:
 
 ```bash
 # Clone the repository
-git clone https://github.com/aetherlark/agentic-payments-sandbox.git
+git clone https://github.com/aetherllama/agentic-payments-sandbox.git
 cd agentic-payments-sandbox
 
 # Install dependencies
@@ -34,6 +39,25 @@ npm run dev
 ```
 
 The app will be available at `http://localhost:5173`
+
+## SAFR Sandbox Tokens
+
+Every agent in this sandbox spends from a shared wallet that you fund yourself — nothing starts pre-loaded with "real" money, and nothing here ever touches a real payment rail. From the **Wallet** panel (visible in both Playground and any guided scenario):
+
+1. Check the **SAFR Sandbox Tokens** section for how many tokens (SBX) remain in the session's pool (5,000 SBX by default).
+2. Click **+50 / +100 / +250 SBX** to transfer tokens from the pool into the wallet balance.
+3. Run or resume an agent — every transaction it attempts, funded or not, still passes through the same `GuardrailValidator.validateMandate` gate described in [demo_guardrails.md](demo_guardrails.md).
+
+The pool is finite per session (funding fails once it's exhausted) so it behaves like a real, boundable resource rather than an infinite faucet, while remaining entirely simulated.
+
+## Testing SAFR at Runtime
+
+SAFR's guardrails are covered at two levels — run both with `npm run test`:
+
+- **Unit-level** (`src/engine/__tests__/GuardrailValidator.test.ts`) — direct calls into `validateMandate`, including boundary values (e.g. exactly at the confirmation threshold) and mandate precedence when multiple mandates fire on one transaction.
+- **Runtime/integration-level** (`src/engine/__tests__/SimulationEngine.test.ts`) — drives a real `SimulationEngine` instance through blocked, HITL-approval, and auto-executed purchase flows, asserting the wallet and action history reflect what the guardrails actually did during a live run.
+
+See [demo_guardrails.md](demo_guardrails.md) for the full mandate-to-implementation mapping, and [SAFR_SPECIFICATION.md](SAFR_SPECIFICATION.md) for the underlying framework.
 
 ## Scenario Walkthroughs
 

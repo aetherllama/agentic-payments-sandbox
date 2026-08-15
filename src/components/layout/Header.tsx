@@ -60,10 +60,10 @@ export function Header({ onMenuClick, showMenuButton }: HeaderProps) {
                 </svg>
               </div>
               <span className="font-semibold text-lg text-slate-900 hidden sm:inline">
-                Agentic Payments SG
+                SAFR Sandbox
               </span>
               <span className="font-semibold text-lg text-slate-900 sm:hidden">
-                Payments SG
+                SAFR
               </span>
             </Link>
 

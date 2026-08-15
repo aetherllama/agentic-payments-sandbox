@@ -136,7 +136,7 @@ export function Landing() {
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl font-bold text-slate-900 mb-4"
           >
-            Agentic Payments Demo
+            SAFR Sandbox
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -144,9 +144,10 @@ export function Landing() {
             transition={{ delay: 0.1 }}
             className="text-lg text-slate-600"
           >
-            Experience how AI agents make autonomous financial decisions. See spending limits,
-            approval workflows, and intelligent payment automation in action through
-            interactive demonstrations.
+            Demo and test <strong>SAFR</strong> &mdash; Safeguards for Agentic Finance at Runtime &mdash;
+            by watching its guardrails validate every autonomous payment decision live. Fund agents with
+            simulated SAFR Sandbox Tokens, then see spending limits, approval workflows, and
+            human-in-the-loop overrides fire in real time.
           </motion.p>
         </div>
 

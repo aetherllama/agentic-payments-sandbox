@@ -1,10 +1,10 @@
-# Foundational Agentic Governance Framework for Financial Services (FAGF-FS)
+# Safeguards for Agentic Finance at Runtime (SAFR)
 **Version: 1.0.0-Stable**
 
 ## 1. Introduction & Purpose
-The **Foundational Agentic Governance Framework for Financial Services (FAGF-FS)** is a standardized specification designed to provide architectural blueprints and operational mandates for the safe deployment of autonomous AI agents in financial ecosystems.
+**SAFR (Safeguards for Agentic Finance at Runtime)** is a standardized specification designed to provide architectural blueprints and operational mandates for the safe deployment of autonomous AI agents in financial ecosystems.
 
-As AI agents transition from advisory roles to transactional execution, FAGF-FS provides the necessary **immutability** and **interpretability** to ensure every movement of capital is governed by both human-defined policy and regulatory mandates.
+As AI agents transition from advisory roles to transactional execution, SAFR provides the necessary **immutability** and **interpretability** to ensure every movement of capital is governed by both human-defined policy and regulatory mandates.
 
 ### 1.1 Core Objectives
 - **Risk Mitigation**: Prevent runaway spending, fraudulent redirections, and logic-based exploits.
@@ -15,7 +15,7 @@ As AI agents transition from advisory roles to transactional execution, FAGF-FS 
 
 ## 2. Theoretical Architecture
 
-FAGF-FS operates on a **Tiered Validation Logic** (TVL) pattern, separating the "Executor" (the AI Agent) from the "Validator" (the Governance Logic).
+SAFR operates on a **Tiered Validation Logic** (TVL) pattern, separating the "Executor" (the AI Agent) from the "Validator" (the Governance Logic).
 
 ### 2.1 The Validator Pattern
 The Validator is a standalone, deterministic service that sits between the Agent and the Transactional Rails.
@@ -120,7 +120,7 @@ sequenceDiagram
 
 ## 3. The Mandate Framework (Policy Layer)
 
-A **Mandate** is the highest level of policy defined in FAGF. It is an abstract safety requirement that is later realized by concrete governance code.
+A **Mandate** is the highest level of policy defined in SAFR. It is an abstract safety requirement that is later realized by concrete governance code.
 
 ### 3.1 Taxonomy of Mandates
 - **AuthZ Mandates**: Focus on "Who" and "Where" (Merchant reputation, Channel security).
@@ -129,9 +129,9 @@ A **Mandate** is the highest level of policy defined in FAGF. It is an abstract 
 - **Reasoning Mandates**: Focus on "Why" (Strategic alignment, Semantic consistency).
 
 ### 3.2 Compliance Mapping
-FAGF provides a standard template for mapping regulatory requirements:
+SAFR provides a standard template for mapping regulatory requirements:
 
-| Regulatory Requirement | FAGF Mandate | Implementation |
+| Regulatory Requirement | SAFR Mandate | Implementation |
 | :--- | :--- | :--- |
 | **AML / Fraud Prevention** | `verify-merchant-01` | Trust-list lookup & IP proximity check. |
 | **Consumer Protection** | `spend-limit-daily` | Aggregate daily delta monitoring. |
@@ -155,7 +155,7 @@ The Validator must proactively verify that the entities mentioned by the agent (
 
 ## 5. Data Models (Technical Layer)
 
-FAGF-FS-compliant implementations MUST adhere to the following core data structures.
+SAFR-compliant implementations MUST adhere to the following core data structures.
 
 ### 5.1 The Governance Envelope
 Every transaction proposal must be wrapped in a Governance Envelope:
@@ -179,7 +179,7 @@ interface GovernanceEnvelope {
 ### 5.2 Constraint Definition Structure
 ```typescript
 interface GovernanceMandate {
-  id: string;           // Standard FAGF ID (e.g., 'fagf-limit-01')
+  id: string;           // Standard SAFR ID (e.g., 'safr-limit-01')
   parameter: any;       // The limit value
   enforcement: 'block' | 'approval_required' | 'shadow_log';
   riskDisclosure: string; // The specific threat being addressed
@@ -201,15 +201,15 @@ interface GovernanceMandate {
 ---
 
 ## 7. Extending the Framework
-Projects can extend FAGF by defining custom **Namespace Mandates**. These must follow the naming convention `ext-[project]-[mandate-id]`.
+Projects can extend SAFR by defining custom **Namespace Mandates**. These must follow the naming convention `ext-[project]-[mandate-id]`.
 
 ### 7.1 Best Practices for Extension
-- Never disable `fagf-blocklist` mandates in production.
+- Never disable `safr-blocklist` mandates in production.
 - Always use a secondary "Verifier" model for high-value extensions.
 - Ensure all custom mandates provide a `riskDisclosure` for auditability.
 
 ## 8. Acknowledgements
-The development of FAGF-FS was made possible through the collaboration of AI safety researchers, financial architects, and regulatory compliance experts dedicated to the secure advancement of autonomous agents.
+The development of SAFR was made possible through the collaboration of AI safety researchers, financial architects, and regulatory compliance experts dedicated to the secure advancement of autonomous agents.
 
 ## 9. References & Foundational Standards
 The following standards and guidelines were instrumental in the creation of this framework:
@@ -224,3 +224,4 @@ The following standards and guidelines were instrumental in the creation of this
 ---
 *End of Specification*
 *Published by: Agentic Financial Standards Org (Conceptual)*
+*Reference implementation: [SAFR Sandbox](README.md), demoed and tested at runtime via [`GuardrailValidator`](src/engine/GuardrailValidator.ts).*

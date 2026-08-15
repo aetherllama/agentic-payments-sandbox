@@ -105,4 +105,115 @@ describe('GuardrailValidator', () => {
         )
         expect(result.allowed).toBe(true)
     })
+
+    describe('boundary values', () => {
+        it('should allow a transaction exactly at the confirmation threshold', () => {
+            const result = GuardrailValidator.validateMandate(
+                mockAgent,
+                { amount: 50, merchantName: 'FairPrice', category: 'Groceries' },
+                [],
+                false
+            )
+            expect(result.allowed).toBe(true)
+        })
+
+        it('should require approval one unit above the confirmation threshold', () => {
+            const result = GuardrailValidator.validateMandate(
+                mockAgent,
+                { amount: 51, merchantName: 'FairPrice', category: 'Groceries' },
+                [],
+                false
+            )
+            expect(result.allowed).toBe(false)
+            expect(result.requiresApproval).toBe(true)
+        })
+
+        it('should allow the transaction that fills exactly up to the hourly rate limit', () => {
+            const now = Date.now()
+            // Timestamps are pushed past the cooldown window (60s) so only the
+            // rate-limit mandate is under test here.
+            const history = Array.from({ length: 4 }, (_, i) => ({
+                id: `txn_${i}`,
+                timestamp: now - 120000 - i * 1000,
+                amount: 10,
+                type: 'debit' as const,
+                status: 'completed' as const,
+                agentId: 'agent_1',
+                description: 'prior',
+            }))
+            const result = GuardrailValidator.validateMandate(
+                mockAgent,
+                { amount: 10, merchantName: 'FairPrice', category: 'Groceries' },
+                history,
+                false
+            )
+            expect(result.allowed).toBe(true)
+        })
+
+        it('should block the transaction that would exceed the hourly rate limit', () => {
+            const now = Date.now()
+            const history = Array.from({ length: 5 }, (_, i) => ({
+                id: `txn_${i}`,
+                timestamp: now - i * 1000,
+                amount: 10,
+                type: 'debit' as const,
+                status: 'completed' as const,
+                agentId: 'agent_1',
+                description: 'prior',
+            }))
+            const result = GuardrailValidator.validateMandate(
+                mockAgent,
+                { amount: 10, merchantName: 'FairPrice', category: 'Groceries' },
+                history,
+                false
+            )
+            expect(result.allowed).toBe(false)
+            expect(result.reason).toContain('Rate limit exceeded')
+        })
+
+        it('should enforce the cooldown when the last transaction was too recent', () => {
+            const history = [{
+                id: 'txn_last',
+                timestamp: Date.now() - 5000,
+                amount: 10,
+                type: 'debit' as const,
+                status: 'completed' as const,
+                agentId: 'agent_1',
+                description: 'prior',
+            }]
+            const result = GuardrailValidator.validateMandate(
+                mockAgent,
+                { amount: 10, merchantName: 'FairPrice', category: 'Groceries' },
+                history,
+                false
+            )
+            expect(result.allowed).toBe(false)
+            expect(result.reason).toContain('Cooling period active')
+        })
+    })
+
+    describe('mandate precedence', () => {
+        it('should block on category restriction even when the merchant is also new', () => {
+            const result = GuardrailValidator.validateMandate(
+                mockAgent,
+                { amount: 10, merchantName: 'Casino', category: 'Gambling' },
+                [],
+                true
+            )
+            expect(result.allowed).toBe(false)
+            expect(result.requiresApproval).toBe(false)
+            expect(result.reason).toContain('restricted')
+        })
+
+        it('should flag new-merchant verification before the confirmation threshold when both apply', () => {
+            const result = GuardrailValidator.validateMandate(
+                mockAgent,
+                { amount: 999, merchantName: 'New Shop', category: 'Electronics' },
+                [],
+                true
+            )
+            expect(result.requiresApproval).toBe(true)
+            expect(result.reason).toContain('New merchant detected')
+        })
+    })
 })

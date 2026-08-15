@@ -1,10 +1,13 @@
 import { motion } from 'framer-motion'
-import { useWallet } from '../../store'
+import { useWallet, useStore } from '../../store'
 import { Card, CardHeader, Badge } from '../common'
 import { formatCurrency } from '../../utils/formatCurrency'
 
+const FUND_AMOUNTS = [50, 100, 250]
+
 export function WalletDisplay() {
   const wallet = useWallet()
+  const fundWithSandboxTokens = useStore((s) => s.fundWithSandboxTokens)
   const availableBalance = wallet.balance - wallet.reservedAmount
 
   return (
@@ -72,6 +75,30 @@ export function WalletDisplay() {
               }}
               transition={{ duration: 0.5, ease: 'easeOut' }}
             />
+          </div>
+        </div>
+
+        <div className="pt-4 border-t border-slate-200">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm text-slate-600">SAFR Sandbox Tokens</span>
+            <span className="text-xs font-medium text-slate-500">
+              {wallet.sandboxTokenPool} SBX available
+            </span>
+          </div>
+          <p className="text-xs text-slate-400 mb-2">
+            Fund this wallet from the sandbox's simulated token pool to run agents — no real money moves.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {FUND_AMOUNTS.map((amount) => (
+              <button
+                key={amount}
+                disabled={wallet.sandboxTokenPool < amount}
+                onClick={() => fundWithSandboxTokens(amount)}
+                className="px-3 py-1.5 rounded-lg text-xs font-medium bg-primary-50 text-primary-700 hover:bg-primary-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              >
+                + {amount} SBX
+              </button>
+            ))}
           </div>
         </div>
       </div>

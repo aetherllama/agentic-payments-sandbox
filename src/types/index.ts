@@ -49,6 +49,7 @@ export interface WalletState {
   transactions: Transaction[]
   dailySpent: number
   dailyLimit: number
+  sandboxTokenPool: number
 }
 
 // ============================================================================
