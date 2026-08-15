@@ -1,15 +1,15 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import { SimulationLayout } from '../components/layout'
-import { Card, Button, Badge, Input, Slider, Modal, ModalFooter } from '../components/common'
+import { Button, Badge, Input, Modal, ModalFooter } from '../components/common'
 import { WalletDisplay, TransactionList, BalanceChart } from '../components/wallet'
 import { TimeControls, EventLog } from '../components/simulation'
-import { AgentCard, ConfigPanel, DecisionTree, RiskMeter } from '../components/agent'
+import { AgentCard, ConfigPanel, DecisionTree, RiskBar } from '../components/agent'
 import { ProgressTracker } from '../components/education'
 import { useStore } from '../store'
 import { createDefaultAgentConfig } from '../store/slices/agentSlice'
-import type { AgentType, ApprovalRequest, SimulationSpeed, Product } from '../types'
+import { GuardrailValidator } from '../engine/GuardrailValidator'
+import type { AgentType, ApprovalRequest, SimulationSpeed } from '../types'
 import { formatCurrency } from '../utils/formatCurrency'
 
 const agentTypes: { type: AgentType; label: string; description: string }[] = [
@@ -20,25 +20,31 @@ const agentTypes: { type: AgentType; label: string; description: string }[] = [
   { type: 'negotiation', label: 'Negotiation Agent', description: 'Negotiates with other agents' },
 ]
 
+// Mix of known Singapore merchants and always-new ones so Playground's random
+// activity exercises every SAFR mandate (blocklist, new-merchant, thresholds).
+const merchantPool: { id: string; category: string }[] = [
+  { id: 'FairPrice', category: 'Groceries' },
+  { id: 'Challenger', category: 'Electronics' },
+  { id: 'Netflix', category: 'Entertainment' },
+  { id: 'SP Group', category: 'Utilities' },
+  { id: 'QuickCash Advisory', category: 'Unlicensed Financial Advice' },
+]
+
 export function Playground() {
   const navigate = useNavigate()
   const {
-    wallet,
     agent: agentState,
     simulation: simulationState,
     addAgent,
     updateAgentConfig,
     removeAgent,
     setActiveAgent,
-    addTransaction,
-    setBalance,
     resetWallet,
     startSimulation,
     pauseSimulation,
     resumeSimulation,
     stopSimulation,
     setSpeed,
-    advanceTime,
     unlockAchievement,
   } = useStore()
 
@@ -47,6 +53,8 @@ export function Playground() {
   const [agentName, setAgentName] = useState('')
   const [showConfigId, setShowConfigId] = useState<string | null>(null)
   const [simulationInterval, setSimulationInterval] = useState<ReturnType<typeof setInterval> | null>(null)
+  const [approvalRequest, setApprovalRequest] = useState<ApprovalRequest | null>(null)
+  const approvalPendingRef = useRef(false)
 
   useEffect(() => {
     unlockAchievement({
@@ -71,24 +79,139 @@ export function Playground() {
     startSimulation()
 
     const interval = setInterval(() => {
-      advanceTime(1000)
+      const store = useStore.getState()
+      if (approvalPendingRef.current || store.simulation.isPaused) return
 
-      if (Math.random() < 0.1) {
-        const amount = Math.floor(Math.random() * 50) + 5
-        if (wallet.balance >= amount) {
-          addTransaction({
+      store.advanceTime(1000)
+
+      if (Math.random() >= 0.15) return
+
+      const enabledAgents = store.agent.agents.filter((a) => a.enabled)
+      if (enabledAgents.length === 0) return
+
+      const agent = enabledAgents[Math.floor(Math.random() * enabledAgents.length)]
+      // ~1 in 5 proposals hit a merchant the wallet has never seen before,
+      // to exercise the new-merchant-verification mandate.
+      const merchant =
+        Math.random() < 0.2
+          ? { id: `New Vendor ${Date.now()}`, category: 'Electronics' }
+          : merchantPool[Math.floor(Math.random() * merchantPool.length)]
+      const amount = Math.floor(Math.random() * 80) + 5
+      const isNewMerchant = !store.wallet.transactions.some((t) => t.merchantId === merchant.id)
+
+      store.addAgentAction({
+        agentId: agent.id,
+        type: 'evaluate',
+        description: `Evaluating ${formatCurrency(amount)} purchase at ${merchant.id}`,
+      })
+
+      const validation = GuardrailValidator.validateMandate(
+        agent,
+        { amount, merchantName: merchant.id, category: merchant.category },
+        store.wallet.transactions,
+        isNewMerchant
+      )
+
+      if (!validation.allowed) {
+        if (validation.requiresApproval) {
+          approvalPendingRef.current = true
+          store.setAgentStatus(agent.id, 'waiting_approval')
+          setApprovalRequest({
+            id: `pg_approval_${Date.now()}`,
+            agentId: agent.id,
+            type: 'transaction',
             amount,
-            type: 'debit',
-            status: 'completed',
-            agentId: agentState.activeAgentId || 'playground',
-            description: `Playground transaction #${Date.now()}`,
+            description: `Purchase at ${merchant.id}`,
+            reasoning: `${validation.reason} Risk mitigated: ${validation.mitigationRisk}`,
+            riskLevel: validation.severity === 'high' ? 5 : validation.severity === 'medium' ? 3 : 1,
+            decisionTree: {
+              id: 'root',
+              type: 'condition',
+              label: 'SAFR Guardrail Check',
+              isActive: true,
+              children: [
+                {
+                  id: 'mandate',
+                  type: 'condition',
+                  label: validation.reason || 'Mandate triggered',
+                  result: 'fail',
+                },
+              ],
+            },
+            createdAt: Date.now(),
+            merchantName: merchant.id,
+          })
+        } else {
+          store.addAgentAction({
+            agentId: agent.id,
+            type: 'complete',
+            description: `Rejected by SAFR guardrail: ${validation.reason}`,
           })
         }
+        return
       }
+
+      if (store.wallet.balance - store.wallet.reservedAmount < amount) return
+
+      store.addTransaction({
+        amount,
+        type: 'debit',
+        status: 'completed',
+        agentId: agent.id,
+        description: `Purchase at ${merchant.id}`,
+        merchantId: merchant.id,
+        merchantName: merchant.id,
+        category: merchant.category,
+      })
+      store.addAgentAction({
+        agentId: agent.id,
+        type: 'execute',
+        description: `Completed ${formatCurrency(amount)} purchase at ${merchant.id}`,
+      })
     }, 1000)
 
     setSimulationInterval(interval)
-  }, [startSimulation, advanceTime, addTransaction, wallet.balance, agentState.activeAgentId])
+  }, [startSimulation])
+
+  const handleApprove = useCallback(() => {
+    if (!approvalRequest) return
+    const store = useStore.getState()
+
+    store.addTransaction({
+      amount: approvalRequest.amount,
+      type: 'debit',
+      status: 'completed',
+      agentId: approvalRequest.agentId,
+      description: approvalRequest.description,
+      merchantId: approvalRequest.merchantName,
+      merchantName: approvalRequest.merchantName,
+      reasoning: `Approved by user: ${approvalRequest.reasoning}`,
+    })
+    store.setAgentStatus(approvalRequest.agentId, 'idle')
+    store.addAgentAction({
+      agentId: approvalRequest.agentId,
+      type: 'execute',
+      description: `User approved: ${approvalRequest.description}`,
+    })
+
+    approvalPendingRef.current = false
+    setApprovalRequest(null)
+  }, [approvalRequest])
+
+  const handleRejectApproval = useCallback(() => {
+    if (!approvalRequest) return
+    const store = useStore.getState()
+
+    store.setAgentStatus(approvalRequest.agentId, 'idle')
+    store.addAgentAction({
+      agentId: approvalRequest.agentId,
+      type: 'complete',
+      description: `User rejected: ${approvalRequest.description}`,
+    })
+
+    approvalPendingRef.current = false
+    setApprovalRequest(null)
+  }, [approvalRequest])
 
   const handlePause = useCallback(() => {
     pauseSimulation()
@@ -104,6 +227,8 @@ export function Playground() {
       clearInterval(simulationInterval)
       setSimulationInterval(null)
     }
+    approvalPendingRef.current = false
+    setApprovalRequest(null)
   }, [stopSimulation, simulationInterval])
 
   const handleSpeedChange = useCallback((speed: SimulationSpeed) => {
@@ -296,6 +421,52 @@ export function Playground() {
             onUpdate={(updates) => updateAgentConfig(selectedAgent.id, updates)}
             onClose={() => setShowConfigId(null)}
           />
+        )}
+      </Modal>
+
+      <Modal
+        isOpen={!!approvalRequest}
+        onClose={() => {}}
+        title="SAFR Approval Required"
+        size="lg"
+      >
+        {approvalRequest && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
+              <div>
+                <p className="text-sm text-slate-500">Amount</p>
+                <p className="text-2xl font-bold text-slate-900">
+                  {formatCurrency(approvalRequest.amount)}
+                </p>
+              </div>
+              <RiskBar level={approvalRequest.riskLevel} label="Risk Level" />
+            </div>
+
+            <div>
+              <h4 className="text-sm font-medium text-slate-700 mb-1">Description</h4>
+              <p className="text-slate-600">{approvalRequest.description}</p>
+            </div>
+
+            <div>
+              <h4 className="text-sm font-medium text-slate-700 mb-1">SAFR Guardrail Reasoning</h4>
+              <p className="text-sm text-slate-600 bg-slate-50 p-3 rounded-lg">
+                {approvalRequest.reasoning}
+              </p>
+            </div>
+
+            {approvalRequest.decisionTree && (
+              <DecisionTree tree={approvalRequest.decisionTree} title="Decision Process" />
+            )}
+
+            <ModalFooter>
+              <Button variant="danger" onClick={handleRejectApproval}>
+                Reject
+              </Button>
+              <Button variant="success" onClick={handleApprove}>
+                Approve
+              </Button>
+            </ModalFooter>
+          </div>
         )}
       </Modal>
     </SimulationLayout>
